@@ -1,4 +1,4 @@
-# The CI/CD pipeline script
+# The CI/CD pipeline script 
 name: CI/CD Pipeline
 
 on:
