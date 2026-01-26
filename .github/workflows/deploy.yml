@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted #
 
     steps:
       # 1. Pull the code from your repo into the runner
@@ -31,19 +31,16 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/my-app:${{ github.sha }}
 
-      # 4. Connect to your Kubernetes Cluster
-      - name: Set Kubernetes Context
-        uses: azure/k8s-set-context@v3
-        with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBE_CONFIG }}
+      # Deployment Step
+      - name: Deploy to Kubernetes
+        run: |
+          # 1. Update the image in your deployment file automatically
+          sed -i "s|image:.*|image: ${{ secrets.DOCKER_USERNAME }}/my-app:${{ github.sha }}|g" k8s/deployment.yaml
+          
+          # 2. Apply the files using the kubectl that is already in your WSL
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
+          
+          # 3. Check status
+          kubectl get pods
 
-      # 5. Deploy to Kubernetes
-      # This step replaces the image in your manifest with the one we just built
-      - name: Deploy to K8s
-        uses: azure/k8s-deploy@v4
-        with:
-          images: ${{ secrets.DOCKER_USERNAME }}/my-app:${{ github.sha }}
-          manifests: |
-            k8s/deployment.yaml
-            k8s/service.yaml
