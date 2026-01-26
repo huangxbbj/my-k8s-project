@@ -1,7 +1,6 @@
 # The CI/CD pipeline script 
 name: CI/CD Pipeline
 
-
 on:
   push:
     branches: [ "main" ] # Triggers the build whenever you push to main
