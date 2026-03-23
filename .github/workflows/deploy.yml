@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted #
+    runs-on: ubuntu-latest #
 
     steps:
       # 1. Pull the code from your repo into the runner
