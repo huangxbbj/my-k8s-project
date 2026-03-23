@@ -11,7 +11,7 @@ def read_root():
     return {
         "message": "Hello from Kubernetes!",
         "hostname": socket.gethostname(),
-        "version": "1.0.0"
+        "version": "1.0.1"
     }
 
 @app.get("/health")
